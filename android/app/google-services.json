@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "672379229156",
+    "project_id": "aeytestmobile",
+    "storage_bucket": "aeytestmobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:672379229156:android:49ff46f567e1aeef476df1",
+        "android_client_info": {
+          "package_name": "com.giffarinefactory.aeygiffarine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "672379229156-qguafgqs1ogia20pk2gqcifnuhb6mmla.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOVC53xFKVodN4qXN-Xq0e31KolOr9lRY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "672379229156-qguafgqs1ogia20pk2gqcifnuhb6mmla.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

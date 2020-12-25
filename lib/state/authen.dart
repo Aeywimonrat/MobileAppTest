@@ -1,4 +1,8 @@
+import 'package:aeygiffarine/state/my_service.dart';
 import 'package:aeygiffarine/state/register.dart';
+import 'package:aeygiffarine/utility/normal_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -8,6 +12,31 @@ class Authen extends StatefulWidget {
 }
 
 class _AuthenState extends State<Authen> {
+  String user, password;
+  bool statusRedEye = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkStatus();
+  }
+
+  Future<Null> checkStatus() async {
+    await Firebase.initializeApp().then((value) async {
+      await FirebaseAuth.instance.authStateChanges().listen((event) {
+        if (event != null) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyService(),
+              ),
+              (route) => false);
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +86,16 @@ class _AuthenState extends State<Authen> {
       margin: EdgeInsets.only(top: 16),
       width: 250,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          if (user == null ||
+              user.isEmpty ||
+              password == null ||
+              password.isEmpty) {
+            normalDialog(context, 'กรุณากรอกข้อมูลให้ครบทุกช่อง');
+          } else {
+            checkAuthen();
+          }
+        },
         child: Text('Login'),
       ),
     );
@@ -68,6 +106,8 @@ class _AuthenState extends State<Authen> {
       margin: EdgeInsets.only(top: 20),
       width: 250,
       child: TextField(
+        onChanged: (value) => user = value.trim(),
+        keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.face),
           labelText: 'User :',
@@ -82,8 +122,19 @@ class _AuthenState extends State<Authen> {
       margin: EdgeInsets.only(top: 20),
       width: 250,
       child: TextField(
-        obscureText: true,
+        onChanged: (value) => password = value.trim(),
+        obscureText: statusRedEye,
         decoration: InputDecoration(
+          suffixIcon: IconButton(
+            icon: statusRedEye
+                ? Icon(Icons.remove_red_eye)
+                : Icon(Icons.remove_red_eye_outlined),
+            onPressed: () {
+              setState(() {
+                statusRedEye = !statusRedEye;
+              });
+            },
+          ),
           prefixIcon: Icon(Icons.lock),
           labelText: 'Password :',
           border: OutlineInputBorder(),
@@ -110,5 +161,23 @@ class _AuthenState extends State<Authen> {
       width: 120,
       child: Image.asset('images/logo.png'),
     );
+  }
+
+  Future<Null> checkAuthen() async {
+    await Firebase.initializeApp().then((value) async {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: user, password: password)
+          .then(
+            (value) => Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MyService(),
+                ),
+                (route) => false),
+          )
+          .catchError((value) {
+        normalDialog(context, value.message);
+      });
+    });
   }
 }
