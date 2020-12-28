@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:aeygiffarine/models/user_model.dart';
 import 'package:aeygiffarine/state/add_information.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -65,19 +67,31 @@ class _InformationState extends State<Information> {
     return Scaffold(
       body: Column(
         children: [
+          userModel.urlAvatar == null
+              ? Text(
+                  'Picture Avatar',
+                  style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                )
+              : Container(
+                  width: 150,
+                  child: Image.network(userModel.urlAvatar),
+                ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                width: 50,
-                child: Image.network(userModel.urlAvatar),
+              Text(
+                'Name : ',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              Text('Name :'),
               userModel == null
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
-                  : Text(userModel.name),
+                  : Text(
+                      userModel.name,
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
               //buildMap(context),
             ],
           ),
